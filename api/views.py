@@ -22,6 +22,7 @@ class StudentView(APIView):
         """
         Get all students
         """
+        print(type(request.user))
     
 
         students = Student.objects.all()
