@@ -4,6 +4,10 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.request import Request
 
+from rest_framework.permissions import IsAuthenticated
+
+
+
 # Import the models
 from .models import Student, Group
 # Import the serializers
@@ -13,10 +17,13 @@ from .serializers import StudentSerializer, GroupSerializer
 
 
 class StudentView(APIView):
+    permission_classes = [IsAuthenticated]
     def get(self, request: Request):
         """
         Get all students
         """
+    
+
         students = Student.objects.all()
         serializer = StudentSerializer(students, many=True)
         return Response(serializer.data)
