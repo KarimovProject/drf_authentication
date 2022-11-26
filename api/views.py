@@ -15,8 +15,12 @@ def get_students(request: Request):
     """
     Get all students
     """
-    students = Student.objects.all()
-    serializer = StudentSerializer(students, many=True)
-    return Response(serializer.data)
+    if request.method == 'GET':
+        students = Student.objects.all()
+        serializer = StudentSerializer(students, many=True)
+        return Response(serializer.data)
+    else:
+        return Response({'error': 'Invalid method'})
+
     
 
