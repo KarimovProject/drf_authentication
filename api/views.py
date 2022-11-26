@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from rest_framework.decorators import api_view
+from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.request import Request
 
@@ -10,17 +11,26 @@ from .serializers import StudentSerializer, GroupSerializer
 
 # Create your views here.
 
-@api_view(['GET'])
-def get_students(request: Request):
-    """
-    Get all students
-    """
-    if request.method == 'GET':
+
+class StudentView(APIView):
+    def get(self, request: Request):
+        """
+        Get all students
+        """
         students = Student.objects.all()
         serializer = StudentSerializer(students, many=True)
         return Response(serializer.data)
-    else:
-        return Response({'error': 'Invalid method'})
+
+    def post(self, request: Request):
+        """
+        Create a new student
+        """
+        serializer = StudentSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            return Response({'error': 'Invalid data'})
 
     
 
